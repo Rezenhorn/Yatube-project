@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}
+  {{ title }}
+{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 p-5">
+    <div class="card">
+      <div class="card-header">
+        {% if is_edit %}Редактировать пост{% else %}Новый пост{% endif %}
+      </div>
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data" action="{% if is_edit %}{% url 'posts:post_edit' form.instance.pk %}{% else %}{% url 'posts:post_create' %}{% endif %}">
+          {% csrf_token %}
+          {% include 'includes/generic_form.html' %}
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary">
+              {% if is_edit %}
+                Сохранить
+              {% else %}
+                Добавить
+              {% endif %}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

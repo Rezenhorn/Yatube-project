@@ -1,0 +1,63 @@
+{% load user_filters %}
+
+{% if user.is_authenticated %}
+  <div class="card my-4">
+    <h5 class="card-header">Добавить комментарий:</h5>
+    <div class="card-body">
+      <form method="post" action="{% url 'posts:add_comment' post.id %}">
+        {% csrf_token %}
+        <div class="form-group mb-2">
+          {{ form.text|addclass:"form-control" }}
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+      </form>
+    </div>
+  </div>
+{% endif %}
+
+{% for comment in post.comments.all %}
+  <div class="card">
+    <div class="card-body">
+      <div class="row justify-content-between">
+        <div class="col-4">
+          <h5 class="card-title">
+            <a href="{% url 'posts:profile' comment.author.username %}">
+              {{ comment.author.username }}
+            </a>
+          </h5>
+        </div>
+        <div class="col-4">
+          <p class="card-text text-end"><small class="text-muted">{{ comment.created|date:"H:i, d E Y" }}</small></p>
+        </div>
+      </div>
+      <p class="card-text">{{ comment.text }}</p>
+      {% if comment.author.pk == user.pk %}
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">Удалить</button>
+        <a class="btn btn-outline-primary btn-sm" href="{% url 'posts:edit_comment' comment.pk %}">Редактировать</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deleteModalLabel">Подтверждениие</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Вы уверены, что хотите удалить комментарий?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <form action="{% url 'posts:del_comment' comment.pk %}" method="post">
+          {% csrf_token %}
+          <button class="btn btn-danger">Удалить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}

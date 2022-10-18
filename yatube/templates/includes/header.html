@@ -1,0 +1,50 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: lightskyblue">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'posts:index' %}">
+    <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+    <span style="color:red">Ya</span>tube</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+      <ul class="nav nav-pills">
+        {% with request.resolver_match.view_name as view_name %}
+        <li class="nav-item">
+          <a class="nav-link {% if view_name == 'about:author' %}active{% endif %}" href="{% url 'about:author' %}">Об авторе</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if view_name == 'about:tech' %}active{% endif %}" href="{% url 'about:tech' %}">Технологии</a>
+        </li>
+        {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link {% if view_name == 'posts:post_create' %}active{% endif %}" href="{% url 'posts:post_create' %}">Новая запись</a>
+        </li>
+        <li class="nav-item dropdown">
+          <span class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Пользователь: <b style="color: black">{{ user.username }}</b></span>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <a class="nav-link {% if view_name == 'users:password_change_form' %}active{% endif %}" href="{% url 'users:password_change_form' %}">Изменить пароль</a>
+            </li>
+            <li class="dropdown-item">
+              <a class="nav-link {% if view_name == 'users:profile_edit' %}active{% endif %}" href="{% url 'users:profile_edit' %}">Редактировать профиль</a>
+            </li>
+            <li class="dropdown-item">
+              <a class="nav-link" href="{% url 'users:logout' %}">Выйти</a>
+            </li>
+          </ul>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'users:login' %}">Войти</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'users:signup' %}">Регистрация</a>
+        </li>
+        {% endif %}
+        {% endwith %}
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Технологии{% endblock %}
+{% block content %}
+{% load static %}
+<h1>Технологии на сайте:</h1>
+<br>
+<div class="row">
+  <aside class="col-12 col-md-3">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><img src="{% static "img/fav/icons8-python-32.png" %}" class="img-thumbnail"> Python 3.7.9</li>
+      <li class="list-group-item"><img src="{% static "img/fav/icons8-django-32.png" %}" class="img-thumbnail"> Django 2.2.16</li>
+      <li class="list-group-item"><img src="{% static "img/fav/icons8-bootstrap-32.png" %}" class="img-thumbnail"> Bootstrap 5</li>
+    </ul>
+  </aside>
+  <article class="col-12 col-md-9">
+    <p>На данном сайте реализовано:
+      <ul>
+        <li>Регистрация пользователей</li>
+        <li>Публикация, редактирование и удаление постов</li>
+        <li>Публикация, редактирование и удаление комментариев к постам</li>
+        <li>Подписки на авторов</li>
+        <li>Странички групп, пользователей и т.д.</li>
+      </ul>
+    </p>
+  </article>
+</div>
+{% endblock %}

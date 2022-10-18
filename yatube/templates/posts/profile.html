@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% block title %}
+  {{ title }}
+{% endblock %}
+{% block content %}
+<div class="mb-4">
+
+
+  <div class="card mb-3">
+    <div class="row no-gutters">
+      <div class="col-md-2">
+        {% thumbnail author.profile.profile_pic "200x150" crop="80% top" as im %}
+          <img src="{{ im.url }}" class="card-img">
+        {% empty %}
+          <img class="card-img" src="{% static "img/default_profile_pic.jpg" %}">
+        {% endthumbnail %}
+      </div>
+      <div class="col-md-10">
+        <div class="card-body">
+          <h5 class="card-title">{{ author.get_full_name }}</h5>
+          <p class="card-text">{{ author.profile.bio }}</p>
+          {% if request.user != author %}
+            {% if following %}
+              <a
+                class="btn btn-primary btn-light"
+                href="{% url 'posts:profile_unfollow' author.username %}" role="button"
+              >
+                Отписаться
+              </a>
+            {% else %}
+              <a
+                class="btn btn-primary"
+                href="{% url 'posts:profile_follow' author.username %}" role="button"
+              >
+                Подписаться
+              </a>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <h3>Всего постов: {{ page_obj.paginator.count }} </h3>
+</div>
+{% for post in page_obj %}
+  {% include 'posts/includes/post.html' %}
+  {% if not forloop.last %}<hr>{% endif %}
+{% endfor %}
+{% include 'posts/includes/paginator.html' %}
+{% endblock %}
